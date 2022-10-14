@@ -55,7 +55,7 @@ namespace ViknCode_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Salary,FK_EmployeeId")] Designation designation)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Salary")] Designation designation)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace ViknCode_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Salary,FK_EmployeeId")] Designation designation)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Salary")] Designation designation)
         {
             if (id != designation.Id)
             {

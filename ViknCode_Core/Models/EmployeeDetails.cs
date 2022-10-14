@@ -12,5 +12,7 @@ namespace ViknCode_Core.Models
         public string Address { get; set; }
         [Required]
         public string EmployeePhoneNumber { get; set;}
+        public int DesignationId { get; set; }
+        public Designation designation { get; set; }
     }
 }

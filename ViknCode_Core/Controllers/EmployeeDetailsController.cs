@@ -23,7 +23,8 @@ namespace ViknCode_Core.Controllers
         // GET: EmployeeDetails
         public async Task<IActionResult> Index()
         {
-              return View(await _context.EmployeeDetails.ToListAsync());
+            var applicationDbContext = _context.EmployeeDetails.Include(e => e.designation);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: EmployeeDetails/Details/5
@@ -35,6 +36,7 @@ namespace ViknCode_Core.Controllers
             }
 
             var employeeDetails = await _context.EmployeeDetails
+                .Include(e => e.designation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employeeDetails == null)
             {
@@ -47,6 +49,7 @@ namespace ViknCode_Core.Controllers
         // GET: EmployeeDetails/Create
         public IActionResult Create()
         {
+            ViewData["DesignationId"] = new SelectList(_context.Designation, "Id", "Name");
             return View();
         }
 
@@ -55,7 +58,7 @@ namespace ViknCode_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EmployeeName,Address,EmployeePhoneNumber")] EmployeeDetails employeeDetails)
+        public async Task<IActionResult> Create([Bind("Id,EmployeeName,Address,EmployeePhoneNumber,DesignationId")] EmployeeDetails employeeDetails)
         {
             if (ModelState.IsValid)
             {
@@ -63,6 +66,7 @@ namespace ViknCode_Core.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["DesignationId"] = new SelectList(_context.Designation, "Id", "Name", employeeDetails.DesignationId);
             return View(employeeDetails);
         }
 
@@ -79,6 +83,7 @@ namespace ViknCode_Core.Controllers
             {
                 return NotFound();
             }
+            ViewData["DesignationId"] = new SelectList(_context.Designation, "Id", "Name", employeeDetails.DesignationId);
             return View(employeeDetails);
         }
 
@@ -87,7 +92,7 @@ namespace ViknCode_Core.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeName,Address,EmployeePhoneNumber")] EmployeeDetails employeeDetails)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeName,Address,EmployeePhoneNumber,DesignationId")] EmployeeDetails employeeDetails)
         {
             if (id != employeeDetails.Id)
             {
@@ -114,6 +119,7 @@ namespace ViknCode_Core.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["DesignationId"] = new SelectList(_context.Designation, "Id", "Name", employeeDetails.DesignationId);
             return View(employeeDetails);
         }
 
@@ -126,6 +132,7 @@ namespace ViknCode_Core.Controllers
             }
 
             var employeeDetails = await _context.EmployeeDetails
+                .Include(e => e.designation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employeeDetails == null)
             {
